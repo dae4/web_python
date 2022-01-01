@@ -1,4 +1,4 @@
-#!C:\Users\jihye\AppData\Local\Programs\Python\Python310\python.exe
+#!/usr/bin/python3
 print("content-type: text/html; charset=utf-8\n")
 import cgi
 import os 
@@ -26,10 +26,11 @@ print('''<html>
     {listStr}
   </ol>
   <a href="create.py">create</a>
-  <form action="process_create.py" method="post">
-    <p><input type="text" name="title" placeholder="title"</p>
-    <p><textarea rows="4" name="description"placeholder="description"></textarea></p>
+  <form action="process_update.py" method="post">
+    <p><input type="hidden" name="pageId" placeholder="pageId" value="{form_defalut_title}"</p>
+    <p><input type="text" name="title" placeholder="title" value="{form_defalut_title}"</p>
+    <p><textarea rows="4" name="description"placeholder="description" >{form_defalut_description}</textarea></p>
     <p><input type="submit"></p>
   </form>
 </body>
-</html>'''.format(title=pageId,docs=description,listStr=listStr))
+</html>'''.format(title=pageId,docs=description,listStr=listStr,form_defalut_title=pageId, form_defalut_description=description))
