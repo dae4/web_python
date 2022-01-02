@@ -2,6 +2,7 @@
 print("content-type: text/html; charset=utf-8\n")
 import cgi
 import os 
+import view
 
 form = cgi.FieldStorage()
 if 'id' in form:
@@ -10,10 +11,6 @@ if 'id' in form:
 else:
   pageId = "Welcome"
   description = "Hello, web"
-files = os.listdir('data/')
-listStr =''
-for item in files:
-  listStr = listStr + '<li><a href="index.py?id={name}">{name}</a></li>'.format(name=item)
 
 print('''<html>
 <head>
@@ -33,4 +30,4 @@ print('''<html>
     <p><input type="submit"></p>
   </form>
 </body>
-</html>'''.format(title=pageId,docs=description,listStr=listStr,form_defalut_title=pageId, form_defalut_description=description))
+</html>'''.format(title=pageId,docs=description,listStr=view.getList(),form_defalut_title=pageId, form_defalut_description=description))

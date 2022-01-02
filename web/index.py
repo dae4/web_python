@@ -2,20 +2,30 @@
 print("content-type: text/html; charset=utf-8\n")
 import cgi
 import os 
+import view
+import html_sanitizer
+
+sanitizer = html_sanitizer.Sanitizer()
 
 form = cgi.FieldStorage()
 if 'id' in form:
   pageId = form['id'].value
   description = open('data/'+pageId,'r').read()
+  description = description.replace('<','&lt;').replace('>','&gt;')
+  description = sanitizer.sanitize(description)
   update_link = '<a href="update.py?id={}">update</a>'.format(pageId)
+  delete_action ='''
+        <form action="process_delete.py" method="post">
+          <input type="hidden" name="pageId" value="{}">
+          <input type="submit" value="delete">
+        </form>
+  '''.format(pageId)
 else:
   pageId = "Welcome"
   description = "Hello, web"
   update_link =''
-files = os.listdir('data/')
-listStr =''
-for item in files:
-  listStr = listStr + '<li><a href="index.py?id={name}">{name}</a></li>'.format(name=item)
+  delete_action=''
+
 
 print('''<html>
 <head>
@@ -28,8 +38,14 @@ print('''<html>
     {listStr}
   </ol>
   <a href="create.py">create</a>
-  <a {update_link} </a>
+  {update_link}
+  {delete_action}
   <h2> {title} </h2>
   <p> {docs} </p>
 </body>
-</html>'''.format(title=pageId,docs=description,listStr=listStr,update_link=update_link))
+</html>
+'''.format(title=pageId,
+        docs=description,
+        listStr=view.getList(),
+        update_link=update_link,
+        delete_action=delete_action))
